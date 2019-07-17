@@ -24,11 +24,49 @@ Node<T1, T2> *root;
 public:
 	SplayTree();
 	~SplayTree();
+	Node<T1, T2> *Parent(Node<T1, T2> *node)
+	{
+		if (node == root)
+			return nullptr;
+		Node<T1, T2> *current = root;
+		while (true)
+		{
+			if (node->key < current->key)
+			{
+				if (current->leftChild == node)
+					return current;
+				if (current->leftChild != nullptr)
+					current = current->leftChild;
+				else
+					return nullptr;
+			}
+			else if (node->key > current->key)
+			{
+				if (current->rightChild == node)
+					return current;
+				if (current->rightChild != nullptr)
+					current = current->rightChild;
+				else
+					return nullptr;
+			}
+			else
+			{
+				if (current->rightChild == node)
+					return current;
+				if (current->leftChild == node)
+					return current;
+				if (current->rightChild != nullptr)
+					current = current->rightChild;
+				else
+					return nullptr;
+			}
+		}
+	}
 	void Add(T1 key, T2 elem);
 	void Add(Node<T1, T2> *&node, T1 key, T2 elem);
-	void RotateLeft(Node<T1, T2> *node);
-	void RotateRight(Node<T1, T2> *node);
-	void Splay(Node<T1, T2> *node, Node<T1, T2> *parent);
+	void RotateLeft(Node<T1, T2> *&node);
+	void RotateRight(Node<T1, T2> *&node);
+	void Splay(Node<T1, T2> *node);
 };
 
 template<typename T1, typename T2>
@@ -56,43 +94,73 @@ template <typename T1, typename T2>
 void SplayTree<T1, T2>::Add(Node<T1, T2> *&node, T1 key, T2 elem)
 {
 	if (node == nullptr)
+	{
 		node = new Node<T1, T2>(key, elem);
+		Splay(node);
+	}
 	else if (key < node->key)
 		Add(node->leftChild, key, elem);
 	else
 		Add(node->rightChild, key, elem);
-	Splay(node, root);
 }
 
 template<typename T1, typename T2>
-void SplayTree<T1, T2>::RotateLeft(Node<T1, T2>* node)
+void SplayTree<T1, T2>::RotateLeft(Node<T1, T2>* &node)
 {
 	Node<T1, T2> *temp = node->rightChild;
 	node->rightChild = temp->leftChild;
 	temp->leftChild = node;
+	node = temp;
 }
 
 template<typename T1, typename T2>
-void SplayTree<T1, T2>::RotateRight(Node<T1, T2>* node)
+void SplayTree<T1, T2>::RotateRight(Node<T1, T2>* &node)
 {
 	Node<T1, T2> *temp = node->leftChild;
 	node->leftChild = temp->rightChild;
 	temp->rightChild = node;
+	node = temp;
 }
 
 template<typename T1, typename T2>
-void SplayTree<T1, T2>::Splay(Node<T1, T2>* node, Node<T1, T2>* parent)
+void SplayTree<T1, T2>::Splay(Node<T1, T2>* node)
 {
-	if (node == root)
-		return;
-	else
+	while (Parent(node) != root)
 	{
+		Node<T1, T2> *parent = Parent(node);
+		Node<T1, T2> *gparent = Parent(parent);
 		if (parent->leftChild == node)
-			RotateRight(parent);
-		else if (parent->rightChild == node)
-			RotateLeft(parent);
-		Splay(node, root);
+		{
+			if (gparent == nullptr)
+				RotateRight(node);
+			else if (gparent->leftChild == parent)
+			{
+				RotateRight(gparent);
+				RotateRight(parent);
+			}
+			else
+			{
+				RotateRight(parent);
+				RotateLeft(gparent);
+			}
+		}
+		else
+		{
+			if (gparent == nullptr)
+				RotateLeft(node);
+			else if (gparent->rightChild == parent)
+			{
+				RotateLeft(gparent);
+				RotateLeft(parent);
+			}
+			else
+			{
+				RotateLeft(parent);
+				RotateRight(gparent);
+			}
+		}
 	}
+
 }
 
 
