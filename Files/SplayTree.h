@@ -23,12 +23,59 @@ class SplayTree
 	Node<T1, T2> *root;
 public:
 	SplayTree();
+	~SplayTree();
+	void Add(T2 elem);
+	void Add(Node<T1, T2> *&node, T2 elem);
+	void RotateLeft(Node<T1, T2> *node);
+	void RotateRight(Node<T1, T2> *node);
 };
 
 template<typename T1, typename T2>
 SplayTree<T1, T2>::SplayTree()
 {
 	root = nullptr;
+}
+
+template<typename T1, typename T2>
+SplayTree<T1, T2>::~SplayTree()
+{
+	//TODO: free memory
+}
+
+template<typename T1, typename T2>
+void SplayTree<T1, T2>::Add(T2 elem)
+{
+	if (root == nullptr)
+		root = new Node<T>(elem);
+	else
+		Add(root, elem);
+}
+
+template <typename T1, typename T2>
+void SplayTree<T1, T2>::Add(Node<T1, T2> *&node, T2 elem)
+{
+	if (node == nullptr)
+		node = new Node<T>(elem);
+	else if (elem < label(node))
+		Add(node->leftChild, elem);
+	else
+		Add(node->rightChild, elem);
+}
+
+template<typename T1, typename T2>
+void SplayTree<T1, T2>::RotateLeft(Node<T1, T2>* node)
+{
+	Node<T1, T2> *temp = node->rightChild;
+	node->rightChild = temp->leftChild;
+	temp->leftChild = node;
+}
+
+template<typename T1, typename T2>
+void SplayTree<T1, T2>::RotateRight(Node<T1, T2>* node)
+{
+	Node<T1, T2> *temp = node->leftChild;
+	node->leftChild = temp->rightChild;
+	temp->rightChild = node;
 }
 
 
