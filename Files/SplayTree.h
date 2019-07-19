@@ -255,7 +255,7 @@ void SplayTree<T1, T2>::Remove(T1 key)
 {
 	if (root == nullptr)
 		return;
-	else
+	else if (IsKeyInArray(key))
 	{
 		Remove(root, key);
 		Node<T1, T2>* current = root;
