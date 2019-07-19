@@ -33,6 +33,18 @@ public:
 		else
 			return nullptr;
 	}
+	inline Node<T1, T2> *Min(Node<T1, T2> *node) // finds minimum element from a specific node
+	{
+		while (node->leftChild != nullptr)
+			node = node->leftChild;
+		return node;
+	}
+	inline Node<T1, T2> *Max(Node<T1, T2> *node) // finds maximum element from a specific node
+	{
+		while (node->rightChild != nullptr)
+			node = node->rightChild;
+		return node;
+	}
 	void Add(T1 key, T2 elem);
 	void Add(Node<T1, T2> *&node, Node<T1, T2> *parent, T1 key, T2 elem);
 	void RotateRight(Node<T1, T2> *&node);
@@ -40,6 +52,8 @@ public:
 	void Splay(Node<T1, T2> *node);
 	T2 Search(T1 key);
 	bool IsKeyInArray(T1 key);
+	void Remove(T1 key);
+	void Remove(Node<T1, T2>*& node, T1 key);
 };
 
 template<typename T1, typename T2>
@@ -51,7 +65,8 @@ SplayTree<T1, T2>::SplayTree()
 template<typename T1, typename T2>
 SplayTree<T1, T2>::~SplayTree()
 {
-	//TODO: free memory
+	while (root != nullptr)
+		Remove(root, root->key);
 }
 
 template<typename T1, typename T2>
@@ -233,4 +248,61 @@ bool SplayTree<T1, T2>::IsKeyInArray(T1 key)
 		}
 	}
 	return false;
+}
+
+template<typename T1, typename T2>
+void SplayTree<T1, T2>::Remove(T1 key)
+{
+	if (root == nullptr)
+		return;
+	else
+		Remove(root, key);
+	//TODO: splay node's parent
+}
+
+template<typename T1, typename T2>
+void SplayTree<T1, T2>::Remove(Node<T1, T2>*& node, T1 key)
+{
+	if (node == nullptr)
+		return;
+	if (key < node->key)
+		Remove(node->leftChild, key);
+	else if (key > node->key)
+		Remove(node->rightChild, key);
+	else
+	{
+		if (node->leftChild == nullptr && node->rightChild == nullptr)
+		{
+			delete node;
+			node = nullptr;
+		}
+		else if (!(node->leftChild != nullptr) || !(node->rightChild != nullptr))
+		{
+			if (node->leftChild != nullptr)
+			{
+				Node<T1, T2> *temp = node->leftChild;
+				temp->parent = node->parent;
+				delete node;
+				node = temp;
+			}
+			else
+			{
+				Node<T1, T2> *temp = node->rightChild;
+				temp->parent = node->parent;
+				delete node;
+				node = temp;
+			}
+		}
+		else
+		{
+			Node<T1, T2> *temp = Min(node->rightChild);
+			Node<T1, T2> *parent = Parent(temp);
+			node->data = temp->data;
+			node->key = temp->key;
+			if (parent->leftChild == temp)
+				Remove(parent->leftChild, parent->leftChild->key);
+			else
+				Remove(parent->rightChild, parent->rightChild->key);
+		}
+	}
 }
