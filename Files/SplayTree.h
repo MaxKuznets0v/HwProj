@@ -24,9 +24,9 @@ class SplayTree
 	};
 	Node<T1, T2> *root;
 public:
-	SplayTree();
-	~SplayTree();
-	inline Node<T1, T2> *Parent(Node<T1, T2> *node)
+	SplayTree(); // constructor
+	~SplayTree(); // destructor (frees memory)
+	inline Node<T1, T2> *Parent(Node<T1, T2> *node) // returns node's parent
 	{
 		if (node != root && node != nullptr)
 			return node->parent;
@@ -45,15 +45,15 @@ public:
 			node = node->rightChild;
 		return node;
 	}
-	void Add(T1 key, T2 elem);
-	void Add(Node<T1, T2> *&node, Node<T1, T2> *parent, T1 key, T2 elem);
-	void RotateRight(Node<T1, T2> *&node);
-	void RotateLeft(Node<T1, T2> *&node);
-	void Splay(Node<T1, T2> *node);
-	T2 Search(T1 key);
-	bool IsKeyInArray(T1 key);
-	void Remove(T1 key);
-	void Remove(Node<T1, T2>*& node, T1 key);
+	void Add(T1 key, T2 elem); // adds element into the tree from the root
+	void Add(Node<T1, T2> *&node, Node<T1, T2> *parent, T1 key, T2 elem); // adds element into the tree from a specific node
+	void RotateRight(Node<T1, T2> *&node); // rotates node and its left child
+	void RotateLeft(Node<T1, T2> *&node); // rotates node and its right child
+	void Splay(Node<T1, T2> *node); // splays the node (push it to the root)
+	T2 Search(T1 key); // searches a node with key and returns its data
+	bool IsKeyInTree(T1 key); // checks whether node with current key is in tree
+	void Remove(T1 key); // removes a node with key from the root
+	void Remove(Node<T1, T2>*& node, T1 key); // removes a node with key from a specific node
 };
 
 template<typename T1, typename T2>
@@ -92,8 +92,8 @@ void SplayTree<T1, T2>::Add(Node<T1, T2> *&node, Node<T1, T2> *parent,T1 key, T2
 		Add(node->rightChild, node, key, elem);
 	else
 	{
-		node->data = elem;
-		Splay(node);
+		node->data = elem; // bring new data to an existing key
+		Splay(node); // splays new element
 		return;
 	}
 }
@@ -116,7 +116,7 @@ void SplayTree<T1, T2>::RotateRight(Node<T1, T2>* &node)
 		temp->parent = node->parent;
 		node->parent = temp;
 	}
-	if (node != root) 
+	if (node != root) // can be refactored
 	{
 		if (node->leftChild != nullptr)
 			node->leftChild->parent = node;
@@ -153,7 +153,7 @@ void SplayTree<T1, T2>::RotateLeft(Node<T1, T2>*& node)
 		temp->parent = node->parent;
 		node->parent = temp;
 	}
-	if (node != root) 
+	if (node != root) // can be refactored
 	{
 		if (node->rightChild != nullptr)
 			node->rightChild->parent = node;
@@ -224,15 +224,15 @@ T2 SplayTree<T1, T2>::Search(T1 key)
 			current = current->rightChild;
 		else
 		{
-			Splay(current);
+			Splay(current); // splayes the found node
 			return current->data;
 		}
 	}
-	return "";
+	return T2(); // returns default value (empty string if T2 is a string)
 }
 
 template<typename T1, typename T2>
-bool SplayTree<T1, T2>::IsKeyInArray(T1 key)
+bool SplayTree<T1, T2>::IsKeyInTree(T1 key)
 {
 	Node<T1, T2> *current = root;
 	while (current != nullptr)
@@ -243,7 +243,7 @@ bool SplayTree<T1, T2>::IsKeyInArray(T1 key)
 			current = current->rightChild;
 		else
 		{
-			Splay(current);
+			Splay(current); // Splays the found node
 			return true;
 		}
 	}
@@ -255,11 +255,12 @@ void SplayTree<T1, T2>::Remove(T1 key)
 {
 	if (root == nullptr)
 		return;
-	else if (IsKeyInArray(key))
+	else if (IsKeyInTree(key))
 	{
 		Remove(root, key);
 		Node<T1, T2>* current = root;
 		while (true) // loop finds deleted element's parent and splays it
+			// just a way to provide splay (could be different) 
 		{
 			if (current->key > key)
 			{
@@ -276,7 +277,7 @@ void SplayTree<T1, T2>::Remove(T1 key)
 					break;
 			}
 		}
-		Splay(current);
+		Splay(current); // splays parent node
 	}
 }
 
@@ -291,12 +292,12 @@ void SplayTree<T1, T2>::Remove(Node<T1, T2>*& node, T1 key)
 		Remove(node->rightChild, key);
 	else
 	{
-		if (node->leftChild == nullptr && node->rightChild == nullptr)
+		if (node->leftChild == nullptr && node->rightChild == nullptr) // if doesn't have children
 		{
 			delete node;
 			node = nullptr;
 		}
-		else if (!(node->leftChild != nullptr) || !(node->rightChild != nullptr))
+		else if (!(node->leftChild != nullptr) || !(node->rightChild != nullptr)) // if has only one child
 		{
 			if (node->leftChild != nullptr)
 			{
@@ -314,12 +315,12 @@ void SplayTree<T1, T2>::Remove(Node<T1, T2>*& node, T1 key)
 			}
 		}
 		else
-		{
+		{ //if has two children
 			Node<T1, T2> *temp = Min(node->rightChild);
 			Node<T1, T2> *parent = Parent(temp);
 			node->data = temp->data;
 			node->key = temp->key;
-			if (parent->leftChild == temp)
+			if (parent->leftChild == temp) //remove minimum node
 				Remove(parent->leftChild, parent->leftChild->key);
 			else
 				Remove(parent->rightChild, parent->rightChild->key);
