@@ -38,6 +38,7 @@ public:
 	void RotateRight(Node<T1, T2> *&node);
 	void RotateLeft(Node<T1, T2> *&node);
 	void Splay(Node<T1, T2> *node);
+	T2 Search(T1 key);
 };
 
 template<typename T1, typename T2>
@@ -195,6 +196,26 @@ void SplayTree<T1, T2>::Splay(Node<T1, T2>* node)
 	}
 }
 
-
-
-
+template<typename T1, typename T2>
+T2 SplayTree<T1, T2>::Search(T1 key)
+{
+	if (root == nullptr)
+		return "";
+	else
+	{
+		Node<T1, T2> *current = root;
+		while (current != nullptr)
+		{
+			if (key < current->key)
+				current = current->leftChild;
+			else if (key > current->key)
+				current = current->rightChild;
+			else
+			{
+				Splay(current);
+				return current->data;
+			}
+		}
+		return "";
+	}
+}
