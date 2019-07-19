@@ -256,8 +256,28 @@ void SplayTree<T1, T2>::Remove(T1 key)
 	if (root == nullptr)
 		return;
 	else
+	{
 		Remove(root, key);
-	//TODO: splay node's parent
+		Node<T1, T2>* current = root;
+		while (true) // loop finds deleted element's parent and splays it
+		{
+			if (current->key > key)
+			{
+				if (current->leftChild != nullptr)
+					current = current->leftChild;
+				else
+					break;
+			}
+			else
+			{
+				if (current->rightChild != nullptr)
+					current = current->rightChild;
+				else
+					break;
+			}
+		}
+		Splay(current);
+	}
 }
 
 template<typename T1, typename T2>
