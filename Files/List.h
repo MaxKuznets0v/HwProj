@@ -41,7 +41,8 @@ public:
 	//TODO: void sort();
 	//Operator [] overloading
 	T & operator[] (int index);
-	//friend int partition(List<T> a);
+	//Reserves (size) cells, only if list is empty
+	inline void reserve(int size);
 };
 
 template <typename T>
@@ -162,4 +163,14 @@ T & List<T>::operator[](int index)
 			count++;
 		}
 	}
+}
+
+template<typename T>
+inline void List<T>::reserve(int size)
+{
+	if (head == nullptr)
+		for (int i = 0; i < size; i++)
+			push_front(T());
+	else
+		return;
 }
