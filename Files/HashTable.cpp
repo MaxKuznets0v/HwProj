@@ -123,7 +123,7 @@ public:
 	void Results(); // Prints the results
 	float LoadFactor(); // Returns load factor
 	int MaxListLength(); // Returns longest list size (list for one hash value)
-	int AverageListLength(); // Returns average list size of all hashes
+	float AverageListLength(); // Returns average list size of all hashes
 };
 
 template <typename T>
@@ -220,7 +220,7 @@ int Hash<T>::MaxListLength()
 }
 
 template<typename T>
-int Hash<T>::AverageListLength()
+float Hash<T>::AverageListLength()
 {
 	int count = 0;
 	int sum = 0;
@@ -230,7 +230,7 @@ int Hash<T>::AverageListLength()
 			count++;
 			sum += hashTable[i].GetSize();
 		}
-	return sum / count;
+	return (float)sum / (float)count;
 }
 
 int main()
