@@ -43,6 +43,8 @@ public:
 	T & operator[] (int index);
 	//Reserves (size) cells, only if list is empty
 	inline void reserve(int size);
+	//Checks whether list is empty
+	inline bool isEmpty();
 };
 
 template <typename T>
@@ -173,4 +175,13 @@ inline void List<T>::reserve(int size)
 			push_front(T());
 	else
 		return;
+}
+
+template<typename T>
+inline bool List<T>::isEmpty()
+{
+	if (head != nullptr)
+		return false;
+	else
+		return true;
 }
