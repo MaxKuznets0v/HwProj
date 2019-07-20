@@ -45,6 +45,8 @@ public:
 	inline void reserve(int size);
 	//Checks whether list is empty
 	inline bool isEmpty();
+	//Checks whether element is in list
+	bool isInList(T elem);
 };
 
 template <typename T>
@@ -184,4 +186,18 @@ inline bool List<T>::isEmpty()
 		return false;
 	else
 		return true;
+}
+
+template<typename T>
+bool List<T>::isInList(T elem)
+{
+	Node<T> *current = head;
+	while (current != nullptr)
+	{
+		if (current->data == elem)
+			return true;
+		else
+			current = current->next;
+	}
+	return false;
 }
