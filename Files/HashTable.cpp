@@ -206,7 +206,7 @@ float Hash<T>::LoadFactor()
 	for (int i = 0; i < hashSize; i++)
 		if (!hashTable[i].isEmpty())
 			count++;
-	return count / hashSize;
+	return (float)count / (float)hashSize;
 }
 
 template<typename T>
