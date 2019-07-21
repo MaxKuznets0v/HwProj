@@ -6,23 +6,26 @@ using namespace std;
 template<typename T>
 class Graph // A full graph
 {
+	int vertices; // vertices amount
+	int edges; // edges amount
+	T **adjacencyMatrix; // full graph adjancency matrix
 	class Country // A subgraph (country)
 	{
 	public:
 		int capital; // country capital
-		List< List<T> > countryMatrix; // subgraph adjancency matrix
+		List<int> countryCities; // cities in country
 		Country(int capital)
 		{
 			this->capital = capital;
+			countryCities.push_front(capital);
 		}
 	};
-	int vertices; // vertices amount
-	int edges; // edges amount
-	T **adjacencyMatrix; // full graph adjancency matrix
-	List<Country*> countries;
+	List<Country*> countries; //List of all countries
 public:
 	Graph(); //Constructor
 	void GetGraph(); //Gets full graph from a file
+	void GrowCountry();
+	void Unused(List<int> &temp); //Puts unused vertices into a list (called at the start)
 };
 
 template<typename T>
@@ -62,15 +65,70 @@ void Graph<T>::GetGraph()
 	{
 		int cap; //current capital
 		input >> cap;
+		cap--;
 		Country *temp = new Country(cap);
 		countries.push_front(temp);
 	}
 	input.close();
 }
 
+template<typename T>
+void Graph<T>::GrowCountry()
+{
+	List<int> temp;
+	Unused(temp);
+	while (!temp.isEmpty())
+	{
+		for (int i = 0; i < countries.GetSize(); i++)
+		{
+			if (temp.isEmpty())
+				break;
+			int min = INT32_MAX, ind1, curCity;
+
+			for (int j = 0; j < countries[i]->countryCities.GetSize(); j++)
+			{
+				for (int k = 0; k < vertices; k++)
+					if (adjacencyMatrix[countries[i]->countryCities[j]][k] != 0 && adjacencyMatrix[countries[i]->countryCities[j]][k] < min && temp.isInList(k))
+					{
+						min = adjacencyMatrix[countries[i]->countryCities[j]][k];
+						ind1 = countries[i]->countryCities[j];
+						curCity = k;
+					}
+			}
+			if (min == INT32_MAX)
+				continue;
+			countries[i]->countryCities.push_front(curCity);
+			adjacencyMatrix[ind1][curCity] = 0;
+			adjacencyMatrix[curCity][ind1] = 0;
+			int ind = 0;
+			while (temp[ind] != curCity)
+				ind++;
+			temp.removeAt(ind);
+		}
+	}
+}
+
+template<typename T>
+void Graph<T>::Unused(List<int> &temp)
+{
+	for (int i = 0; i < vertices; i++)
+		temp.push_front(i);
+	for (int i = 0; i < countries.GetSize(); i++)
+	{
+		if (temp.isInList(countries[i]->capital))
+		{
+			int j = 0;
+			while (temp[j] != countries[i]->capital)
+				j++;
+			temp.removeAt(j);
+		}
+	}
+}
+
 int main()
 {
 	Graph<int> city;
+	city.GrowCountry();
 	system("pause");
 	return 0;
 }
