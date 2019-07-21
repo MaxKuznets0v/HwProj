@@ -37,6 +37,8 @@ Graph<T>::Graph()
 	edges = 0;
 	adjacencyMatrix = nullptr;
 	GetGraph();
+	GrowCountry();
+	Results();
 }
 
 template<typename T>
@@ -149,9 +151,7 @@ void Graph<T>::Results()
 
 int main()
 {
-	Graph<int> city;
-	city.GrowCountry();
-	city.Results();
+	Graph<int> region;
 	system("pause");
 	return 0;
 }
