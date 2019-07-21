@@ -23,9 +23,11 @@ class Graph // A full graph
 	List<Country*> countries; //List of all countries
 public:
 	Graph(); //Constructor
+	~Graph(); //Destructor (frees memory)
 	void GetGraph(); //Gets full graph from a file
-	void GrowCountry();
+	void GrowCountry(); //Distributes cities to each country
 	void Unused(List<int> &temp); //Puts unused vertices into a list (called at the start)
+	void Results(); //Shows cities in each country
 };
 
 template<typename T>
@@ -35,6 +37,14 @@ Graph<T>::Graph()
 	edges = 0;
 	adjacencyMatrix = nullptr;
 	GetGraph();
+}
+
+template<typename T>
+Graph<T>::~Graph()
+{
+	for (int i = vertices - 1; i >= 0; i--)
+		delete[] adjacencyMatrix[i];
+	delete[] adjacencyMatrix;
 }
 
 template<typename T> 
@@ -125,10 +135,23 @@ void Graph<T>::Unused(List<int> &temp)
 	}
 }
 
+template<typename T>
+void Graph<T>::Results()
+{
+	for (int i = 0; i < countries.GetSize(); i++)
+	{
+		cout << "Country " << countries[i]->capital + 1 << " cities: ";
+		for (int j = 0; j < countries[i]->countryCities.GetSize(); j++)
+			cout << countries[i]->countryCities[j] + 1 << " ";
+		cout << endl;
+	}
+}
+
 int main()
 {
 	Graph<int> city;
 	city.GrowCountry();
+	city.Results();
 	system("pause");
 	return 0;
 }
