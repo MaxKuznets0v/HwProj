@@ -22,6 +22,8 @@ class List
 public:
 	//Constructor
 	List();
+	//Copy constructor
+	List(List<T> &other);
 	//Destructor (frees the memory)
 	~List();
 	//Returns list size
@@ -41,6 +43,22 @@ public:
 	//TODO: void sort();
 	//Operator [] overloading
 	T & operator[] (int index);
+	//Operator = overloading
+	List<T> & operator= (List<T> &other)
+	{
+		Node<T> *current = head;
+		for (int i = 0; i < other.GetSize(); i++)
+		{
+			if (size <= i)
+				push_back(other[i]);
+			else
+			{
+				current->data = other[i];
+				current = current->next;
+			}
+		}
+		return *this;
+	}
 	//Reserves (size) cells, only if list is empty
 	inline void reserve(int size);
 	//Checks whether list is empty
@@ -54,6 +72,13 @@ List<T>::List() //Default
 {
 	size = 0;
 	head = nullptr;
+}
+
+template<typename T>
+List<T>::List(List<T> &other)
+{
+	for (int i = 0; i < other.GetSize(); i++)
+		push_back(other[i]);
 }
 
 template<typename T>
