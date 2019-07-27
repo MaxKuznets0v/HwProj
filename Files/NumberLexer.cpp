@@ -4,19 +4,8 @@ using namespace std;
 
 class NumberLexer
 {
-	//enum States
-	//{
-	//	digit = 0, // from 0 to 9
-	//	sign, // "+" or "-"
-	//	bigE, // "E" for "10 in power of"
-	//	comma, // "."
-	//	other // another characters 
-	//};
-
-	bool isDigit(char letter);
+	bool isDigit(char letter); //Checks whether character is a digit
 public:
-	NumberLexer();
-	~NumberLexer();
 	bool isNumber(string str);
 };
 
@@ -26,14 +15,6 @@ inline bool NumberLexer::isDigit(char letter)
 		return true;
 	else
 		return false;
-}
-
-NumberLexer::NumberLexer()
-{
-}
-
-NumberLexer::~NumberLexer()
-{
 }
 
 bool NumberLexer::isNumber(string str)
@@ -81,7 +62,7 @@ bool NumberLexer::isNumber(string str)
 int main()
 {
 	NumberLexer text;
-	string x = "12E22";
+	string x = "12E+22";
 	text.isNumber(x);
 	system("pause");
 	return 0;
