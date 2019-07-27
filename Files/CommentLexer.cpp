@@ -16,8 +16,8 @@ class CommentLexer
 	void GetTable(); // Getting move table from a file
 	void GetCode(); // Getting code from a file
 public:
-	CommentLexer();
-	void FindComments();
+	CommentLexer(); //Constructor
+	void FindComments(); //Lexer
 };
 
 CommentLexer::CommentLexer()
