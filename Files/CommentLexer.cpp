@@ -42,7 +42,12 @@ void CommentLexer::GetCode()
 {
 	ifstream input;
 	input.open("C:\\Maxim\\Repositories\\HwProj\\inputs\\inputText(CommentLexer).txt");
-
+	while (input.eof())
+	{
+		string temp;
+		getline(input, temp);
+		text += temp;
+	}
 	input.close();
 }
 
