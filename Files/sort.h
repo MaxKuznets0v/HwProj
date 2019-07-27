@@ -205,3 +205,29 @@ void mergeSort(T *a, int lo, int size) //An actual sort
 	mergeS(a, lo, hi);
 }
 //---------------------------------------------------------------------------
+
+//---------------------------------Bogosort----------------------------------
+//Worst sort algorithm
+template <typename T>
+bool isCorrect(T *a, int lo, int hi)
+{
+	for (int i = lo + 1; i < hi; i++)
+		if (a[i] < a[i - 1])
+			return false;
+	return true;
+}
+
+template <typename T>
+void shuffle(T *a, int lo, int hi)
+{
+	for (int i = lo; i < hi; i++)
+		std::swap(a[i], a[rand() % hi]);
+}
+
+template <typename T>
+void bogoSort(T *a, int lo, int hi)
+{
+	while (!isCorrect(a, lo, hi))
+		shuffle(a, lo, hi);
+}
+//---------------------------------------------------------------------------
