@@ -46,16 +46,24 @@ public:
 	//Operator = overloading
 	List<T> & operator= (List<T> &other)
 	{
-		Node<T> *current = head;
-		for (int i = 0; i < other.GetSize(); i++)
+		if (size != other.GetSize())
 		{
-			if (size <= i)
-				push_back(other[i]);
+			if (size < other.GetSize())
+			{
+				for (int i = size; i < other.GetSize(); i++)
+					push_back(other[i]);
+			}
 			else
 			{
-				current->data = other[i];
-				current = current->next;
+				while (size != other.GetSize())
+					pop_front();
 			}
+		}
+		Node<T> *current = head;
+		for (int i = 0; i < size; i++)
+		{
+			current->data = other[i];
+			current = current->next;
 		}
 		return *this;
 	}
