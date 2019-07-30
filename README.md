@@ -24,6 +24,8 @@
 **PostfixCount** - stack-based counting postfix expression<br />
 **PrimMST** - finding minimal spanning tree Prim algorithm<br />
 **Set** - set based on BinarySearchTree<br />
+**Test2.1** - less than number, greater and less, greater
+**Test2.2** - basic operations with stack
 **TreeExpression** - building a binary tree by prefix expression and counting<br />
 
 ## Inputs (inputs folder)
