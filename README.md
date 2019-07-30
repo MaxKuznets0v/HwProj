@@ -1,7 +1,7 @@
 # Работы для HwProj
 
 ## Headers (Files folder)
-Stack, List, BinarySearchTree, SplayTree - headers realizing the appropriate data types\n
+Stack, List, BinarySearchTree, SplayTree - headers realizing the appropriate data types<br />
 Sort - collection of sorting algorithms 
 
 ## CPP files (Files folder)
